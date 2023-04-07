@@ -1,5 +1,5 @@
-$("#topic").typedInput({
+$("#node-input-topic").typedInput({
   type:"str',
   types:["str","jsonata","global"],
-  typeField: "#topic"
+  typeField: "#node-input-topic"
 })
