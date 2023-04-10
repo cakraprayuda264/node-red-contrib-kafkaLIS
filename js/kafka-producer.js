@@ -1,15 +1,15 @@
 module.exports = function(RED) {
     const kafka = require('kafka-node');
-
+    
     function KafkaProducerNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
         node.ready = false;
-
+        
         node.init = function(){
             let broker = RED.nodes.getNode(config.broker);
-
-            let kafkaClient = new kafka.KafkaClient(broker.getOptions());;
+            
+            let kafkaClient = new kafka.KafkaClient(broker.getOptions());
             
             let producerOptions = new Object();
             producerOptions.requireAcks = config.requireAcks;
@@ -37,12 +37,22 @@ module.exports = function(RED) {
         }
     
         node.init();
-    
+         	var inputVarName = config.topic;
+        var globalContext = this.context().global;
+
+        // cek apakah variabel global telah terdefinisi dengan benar
+        if (globalContext.get(inputVarName)) {
+            var inputVarValue = globalContext.get(inputVarName);
+        } else {
+            node.error("Global variable " + inputVarName + " is not defined.");
+            return;
+        }
+
         node.on('input', function(msg) {
-            if(node.ready){
+            
+		if(node.ready){
                 var sendOptions = new Object();
-                
-                sendOptions.topic = config.topic;
+                sendOptions.topic = inputVarValue;
                 sendOptions.attributes = config.attributes;
                 sendOptions.messages = [msg.payload];
                 
