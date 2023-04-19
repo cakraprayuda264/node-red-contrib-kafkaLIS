@@ -102,3 +102,4 @@ module.exports = function(RED) {
         node.init();
     }
     RED.nodes.registerType("kafka-consumer",KafkaConsumerNode);
+}
