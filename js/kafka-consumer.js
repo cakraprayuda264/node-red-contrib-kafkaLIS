@@ -11,14 +11,26 @@ module.exports = function(RED) {
             }
             return u;
         }
-            
+
+            var inputVarName = config.topic;
+            var globalContext = this.context().global;
+
+        
+              if (globalContext.get(inputVarName)) {
+                 var inputVarValue = globalContext.get(inputVarName);
+                 } else {
+                    node.error("Global variable " + inputVarName + " is not defined.");
+                  return;
+                 }
+
+
         node.init = function(){
             const kafka = require('kafka-node'); 
 
             var broker = RED.nodes.getNode(config.broker);        
             var options = broker.getOptions();
 
-            var topic = config.topic;
+            var topic = inputVarValue;
     
             options.groupId = 'nodered_kafka_client_' + (!config.groupid || config.groupid === '' ? e1() : config.groupid);
             options.fromOffset = config.fromOffset;
@@ -70,6 +82,7 @@ module.exports = function(RED) {
 
         node.on('close', function() {
             node.status({});
+
             clearInterval(node.interval);
             node.consumerGroup.removeListener('connect', node.onConnect);
             node.consumerGroup.removeListener('message', node.onMessage);
@@ -89,4 +102,3 @@ module.exports = function(RED) {
         node.init();
     }
     RED.nodes.registerType("kafka-consumer",KafkaConsumerNode);
-}
