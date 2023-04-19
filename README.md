@@ -1,2 +1,2 @@
-# node-red-contrib-kafkajs
+# node-red-contrib-kafkaLIS
 adjustment for lis purpose
