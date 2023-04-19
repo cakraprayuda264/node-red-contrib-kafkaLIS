@@ -18,9 +18,8 @@
         <input type="text" id="node-input-groupid" placeholder="e.g:'nodered_kafka_client_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'">
     </div>
     <div class="form-row">
-        <label for="node-input-topic"><i class="fa fa-tag"></i> Topic</label>
-        <input type="text" id="node-input-topic" placeholder="Topic">
-        <input type="hidden" id="node-input-topic" placeholder="Topic">
+        <label for="node-input-topic"><i class="fa fa-code"></i>global topic</label>
+        <input type="text" id="node-input-topic" placeholder="enter global varable name">
     </div>
 
     <div class="form-row">
@@ -69,7 +68,7 @@
             broker: {type:"kafka-broker"},
             outOfRangeOffset: {value:"earliest"},
             fromOffset: {value:"latest"},
-            topic: {required:true},
+            topic: {value:"", required:true},
             groupid: {required:false},
             encoding: {value: "utf8"}
         },
@@ -85,10 +84,26 @@
         },
         oneditprepare: function() {
 
+        var inputVarName = this.credentials.topic;
+        if (inputVarName) {
+                $("#node-input-topic").val(inputVarName);
+        }
+
+
         },
         oneditsave: function() {
 
+        var inputVarName = $("#node-input-topic").val();
+        this.topic = inputVarName;
+
+
         },
+        oneditcancel: function() {
+
+        delete this.credentials.topic
+
+        },
+
         oneditresize: function(size) {
 
         }
