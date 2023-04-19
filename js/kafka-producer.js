@@ -39,7 +39,7 @@ module.exports = function(RED) {
         node.init();
 
         node.on('input', function(msg) {
-	var inputVarName = config.topic;
+        var inputVarName = config.topic;
         var globalContext = this.context().global;
 
         // cek apakah variabel global telah terdefinisi dengan benar
@@ -49,6 +49,7 @@ module.exports = function(RED) {
             node.error("Global variable " + inputVarName + " is not defined.");
             return;
         }
+
 		if(node.ready){
                 var sendOptions = new Object();
                 sendOptions.topic = inputVarValue;
